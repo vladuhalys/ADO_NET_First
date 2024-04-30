@@ -6,6 +6,24 @@ using System.Xml;
 
 namespace Data
 {
+
+    public class Test
+    {
+        public int Id { get; set; }
+        public string Text { get; set; }
+
+        public Test(int id, string text)
+        {
+            Id = id;
+            Text = text;
+        }
+
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, Text: {Text}";
+        }
+    }
     public class DBManager
     {
         public string? ConnectionString { get; set; } = null;
@@ -51,23 +69,19 @@ namespace Data
             }
         }
 
-        public List<string> SelectFromDb(string query)
+        public List<Test> SelectFromDb(string query)
         {
             try
             {
-                List<string> result = new List<string>();
+                List<Test> result = new List<Test>();
                 using (SqlConnection connection = new SqlConnection(this.ConnectionString))
                 {
                     connection.Open();
                     SqlCommand cmd = new SqlCommand(query, connection);
                     var sqlReader = cmd.ExecuteReader();
-                    while(sqlReader.Read())
+                    while (sqlReader.Read())
                     {
-                        for (int i = 1; i < sqlReader.FieldCount; i++)
-                        {
-                            result.Add(sqlReader.GetValue(i).ToString());
-                        }
-                        
+                        result.Add(new Test(sqlReader.GetInt32(0), sqlReader.GetString(1)));
                     }
                 }
                 return result;
