@@ -1,0 +1,29 @@
+﻿<Window x:Class="ADO_NET_First.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:ADO_NET_First"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="239*"/>
+            <ColumnDefinition Width="561*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="120"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="tbConString" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="20,10,20,10" 
+         materialDesign:HintAssist.Hint="Enter Connection String" TextChanged="tbConString_TextChanged" Grid.ColumnSpan="2"/>
+        <StackPanel Orientation="Vertical" Margin="20 10 20 0" Grid.Row="1" Grid.ColumnSpan="2">
+            <TextBox x:Name="tbQuery" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     materialDesign:HintAssist.Hint="Enter your query" Margin="0 0 0 20"/>
+            <Button Content="Click" Style="{StaticResource MaterialDesignOutlinedButton}" Click="Button_Click"/>
+        </StackPanel>
+        <DataGrid x:Name="dgMain" Grid.Row="2" AutoGenerateColumns="True" Style="{StaticResource MaterialDesignDataGrid}" Background="White" IsReadOnly="True" Grid.ColumnSpan="2"/>
+    </Grid>
+</Window>
