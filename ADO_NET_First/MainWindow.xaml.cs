@@ -12,10 +12,12 @@ namespace ADO_NET_First
     public partial class MainWindow : Window
     {
         DBManager dBManager;
+        Test test;
         public MainWindow()
         {
             InitializeComponent();
             dBManager = new DBManager();
+            dgMain.ItemsSource = dBManager.SelectFromDb();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -23,27 +25,8 @@ namespace ADO_NET_First
 
             try
             {
-                if (dBManager.ConnectionString == null)
-                {
-                    throw new Exception("Connection String is Null");
-                }
-                if (dBManager.ConnectToDB())
-                {
-                    if (tbQuery.Text.ToLower().StartsWith("select"))
-                    {
-                        List<Test> reader = dBManager.SelectFromDb(tbQuery.Text);
-                        if (reader != null)
-                        {
-                            dgMain.ItemsSource = reader;
-                            UpdateLayout();
-                        }
-                    }
-                    else
-                    {
-                        int result = dBManager.CreateOrInsertOrDelete(tbQuery.Text);
-                        MessageBox.Show(result.ToString(), "Result", MessageBoxButton.OK, MessageBoxImage.Information); 
-                    }
-                }
+                dBManager.InsertToDb(new Test(id: 0, text: tbName.Text));
+                dgMain.ItemsSource = dBManager.SelectFromDb();
             }
             catch (Exception error)
             {
@@ -51,9 +34,21 @@ namespace ADO_NET_First
             }
         }
 
-        private void tbConString_TextChanged(object sender, TextChangedEventArgs e)
+        private void dgMain_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            dBManager.ConnectionString = tbConString.Text;
+            //Test test = (Test)dgMain.SelectedItem;
+            //tbName.Text = test.Text;
+        }
+
+        private void dgMain_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            Test test = (Test)dgMain.SelectedItem;
+            if (e.EditAction == DataGridEditAction.Commit)
+            {
+                var element = e.EditingElement as TextBox;
+                test.Text = element.Text;
+                dBManager.UpdateToDb(test);
+            }
         }
     }
 }

@@ -13,17 +13,14 @@
             <ColumnDefinition Width="561*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="120"/>
             <RowDefinition/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="tbConString" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="20,10,20,10" 
-         materialDesign:HintAssist.Hint="Enter Connection String" TextChanged="tbConString_TextChanged" Grid.ColumnSpan="2"/>
-        <StackPanel Orientation="Vertical" Margin="20 10 20 0" Grid.Row="1" Grid.ColumnSpan="2">
-            <TextBox x:Name="tbQuery" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     materialDesign:HintAssist.Hint="Enter your query" Margin="0 0 0 20"/>
-            <Button Content="Click" Style="{StaticResource MaterialDesignOutlinedButton}" Click="Button_Click"/>
+        <DataGrid x:Name="dgMain" Grid.Row="0" AutoGenerateColumns="True" Style="{StaticResource MaterialDesignDataGrid}" 
+                  Background="White" Grid.ColumnSpan="2" CanUserAddRows="True" SelectedCellsChanged="dgMain_SelectedCellsChanged" CellEditEnding="dgMain_CellEditEnding"/>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <TextBox x:Name="tbName" Width="300" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="10 0 10 10"/>
+            <Button Content="Run" FontSize="12" Click="Button_Click" Width="300" Margin="100 0 0 0"/>
         </StackPanel>
-        <DataGrid x:Name="dgMain" Grid.Row="2" AutoGenerateColumns="True" Style="{StaticResource MaterialDesignDataGrid}" Background="White" IsReadOnly="True" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

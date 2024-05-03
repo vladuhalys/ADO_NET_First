@@ -26,50 +26,12 @@ namespace Data
     }
     public class DBManager
     {
-        public string? ConnectionString { get; set; } = null;
+        public string ConnectionString = "Data Source=\"10.0.0.40, 1433\";Initial Catalog=ado_test;User ID=student;Password=1111;Encrypt=True;Trust Server Certificate=True";
 
-        public DBManager(string? connectionString = null) {
-            this.ConnectionString = connectionString;
+        public DBManager() {
+  
         }
-        
-        public bool ConnectToDB()
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(this.ConnectionString))
-                {
-                    connection.Open();
-                }
-                return true;
-            }
-            catch(SqlException ex) 
-            {
-                throw new Exception(ex.Message);
-            }
-           
-        }
-
-        public int CreateOrInsertOrDelete(string query)
-        {
-            int result = 0;
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(this.ConnectionString))
-                {
-                    connection.Open();
-                    SqlCommand cmd = new SqlCommand(query, connection);
-                    result = cmd.ExecuteNonQuery();
-                }
-                return result;
-                
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public List<Test> SelectFromDb(string query)
+        public List<Test> SelectFromDb()
         {
             try
             {
@@ -77,7 +39,7 @@ namespace Data
                 using (SqlConnection connection = new SqlConnection(this.ConnectionString))
                 {
                     connection.Open();
-                    SqlCommand cmd = new SqlCommand(query, connection);
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM test", connection);
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())
                     {
@@ -85,6 +47,43 @@ namespace Data
                     }
                 }
                 return result;
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void InsertToDb(Test test)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(this.ConnectionString))
+                {
+                    connection.Open();
+                    SqlCommand cmd = new SqlCommand("INSERT INTO test (text) VALUES (@text)", connection);
+                    cmd.Parameters.AddWithValue("@text", test.Text);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void UpdateToDb(Test test)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(this.ConnectionString))
+                {
+                    connection.Open();
+                    SqlCommand cmd = new SqlCommand("UPDATE test SET text = @text WHERE id = @id", connection);
+                    cmd.Parameters.AddWithValue("@text", test.Text);
+                    cmd.Parameters.AddWithValue("@id", test.Id);
+                    cmd.ExecuteNonQuery();
+                }
             }
             catch (SqlException ex)
             {
